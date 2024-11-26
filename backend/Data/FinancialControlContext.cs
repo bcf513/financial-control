@@ -9,5 +9,6 @@ namespace FinancialControl.Data
 
         public DbSet<User> User { get; set; }
         public DbSet<Category> Category { get; set; }
+        public DbSet<Transaction> Transaction { get; set; }
     }
 }
