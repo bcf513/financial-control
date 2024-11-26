@@ -42,9 +42,7 @@ namespace FinancialControl.Services
         {
             var category = await _repository.GetByIdAsync(id);
             if (category == null)
-            {
                 return false;
-            }
 
             await _repository.DeleteAsync(id);
             return true;

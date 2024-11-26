@@ -8,24 +8,24 @@ namespace FinancialControl.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IUserService _service;
 
         public UserController(IUserService userService)
         {
-            _userService = userService;
+            _service = userService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _userService.GetAllUsersAsync();
+            var users = await _service.GetAllUsersAsync();
             return Ok(users);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(Guid id)
         {
-            var user = await _userService.GetUserByIdAsync(id);
+            var user = await _service.GetUserByIdAsync(id);
             if (user == null)
                 return NotFound();
             return Ok(user);
@@ -34,7 +34,7 @@ namespace FinancialControl.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
-            await _userService.CreateUserAsync(user);
+            await _service.CreateUserAsync(user);
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
 
@@ -43,14 +43,20 @@ namespace FinancialControl.Controllers
         {
             if (id != user.Id)
                 return BadRequest();
-            await _userService.UpdateUserAsync(user);
+            var updatedCategory = await _service.UpdateUserAsync(user);
+            if (updatedCategory == null)
+                return NotFound();
+
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            await _userService.DeleteUserAsync(id);
+            var success = await _service.DeleteUserAsync(id);
+            if (!success)
+                return NotFound();
+
             return NoContent();
         }
     }
