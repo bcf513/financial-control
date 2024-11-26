@@ -8,5 +8,6 @@ namespace FinancialControl.Data
         public FinancialControlContext(DbContextOptions<FinancialControlContext> options) : base(options) { }
 
         public DbSet<User> User { get; set; }
+        public DbSet<Category> Category { get; set; }
     }
 }
